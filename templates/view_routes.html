@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}View Routes - Optimal College Bus Route Planner{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-map"></i> View Optimized Routes</h4>
+            </div>
+            <div class="card-body">
+                <div class="step-container">
+                    <div class="step completed">
+                        <i class="fas fa-upload"></i>
+                        <h5>Step 1</h5>
+                        <p>Upload Student Data</p>
+                    </div>
+                    <div class="step completed">
+                        <i class="fas fa-bus"></i>
+                        <h5>Step 2</h5>
+                        <p>Configure Buses</p>
+                    </div>
+                    <div class="step completed">
+                        <i class="fas fa-route"></i>
+                        <h5>Step 3</h5>
+                        <p>Optimize Routes</p>
+                    </div>
+                    <div class="step active">
+                        <i class="fas fa-map"></i>
+                        <h5>Step 4</h5>
+                        <p>View Results</p>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Route Map</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="map-container">
+                                    <iframe src="{{ url_for('static', filename='route_map.html') }}" width="100%" height="600" frameborder="0"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Route Statistics</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Bus #</th>
+                                                <th>Number of Students</th>
+                                                <th>Total Distance (km)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for bus in stats %}
+                                            <tr>
+                                                <td>{{ bus.id }}</td>
+                                                <td>{{ bus.student_count }}</td>
+                                                <td>{{ "%.2f"|format(bus.distance) }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            <tr class="table-primary">
+                                                <td><strong>Total</strong></td>
+                                                <td><strong>{{ stats|sum(attribute='student_count') }}</strong></td>
+                                                <td><strong>{{ "%.2f"|format(stats|sum(attribute='distance')) }}</strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <a href="{{ url_for('generate_report') }}" class="btn btn-success btn-lg">
+                        <i class="fas fa-file-alt"></i> Generate Detailed Report
+                    </a>
+                    <a href="{{ url_for('configure_buses') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Bus Configuration
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

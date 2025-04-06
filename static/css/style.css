@@ -1,0 +1,120 @@
+/* Main Styles for Bus Route Planner */
+
+.map-container {
+    height: 600px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.bus-icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+    color: #007bff;
+}
+
+.step-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.step {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.step.completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.step i {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    font-weight: bold;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Animation for route lines */
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar, .step-container, .btn, footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    
+    .card-header {
+        background-color: #fff !important;
+        color: #000 !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .step-container {
+        flex-direction: column;
+    }
+    
+    .step {
+        margin-bottom: 10px;
+    }
+    
+    .map-container {
+        height: 400px;
+    }
+}

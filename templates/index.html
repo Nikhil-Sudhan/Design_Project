@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Optimal College Bus Route Planner{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-map-marked-alt"></i> Optimal College Bus Route Planner</h4>
+            </div>
+            <div class="card-body">
+                <div class="step-container">
+                    <div class="step active">
+                        <i class="fas fa-upload"></i>
+                        <h5>Step 1</h5>
+                        <p>Upload Student Data</p>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-bus"></i>
+                        <h5>Step 2</h5>
+                        <p>Configure Buses</p>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-route"></i>
+                        <h5>Step 3</h5>
+                        <p>Optimize Routes</p>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-map"></i>
+                        <h5>Step 4</h5>
+                        <p>View Results</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Upload Student Data</h5>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="file" class="form-label">Student CSV File</label>
+                                        <input type="file" class="form-control" id="file" name="file" accept=".csv" required>
+                                        <div class="form-text">
+                                            Upload a CSV file with student information. The file should contain columns for student ID, name, and address (or latitude/longitude).
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="college_lat" class="form-label">College Latitude</label>
+                                        <input type="number" class="form-control" id="college_lat" name="college_lat" step="0.000001" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="college_lng" class="form-label">College Longitude</label>
+                                        <input type="number" class="form-control" id="college_lng" name="college_lng" step="0.000001" required>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-upload"></i> Upload and Process
+                                    </button>
+                                    
+                                    <a href="{{ url_for('download_sample') }}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-download"></i> Download Sample CSV
+                                    </a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>About This Tool</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                    The Optimal College Bus Route Planner helps college administrators plan efficient bus routes for students based on their home locations and bus capacity constraints.
+                                </p>
+                                
+                                <h6>Features:</h6>
+                                <ul>
+                                    <li>Upload student addresses in CSV format</li>
+                                    <li>Automatically cluster student locations into optimal bus routes</li>
+                                    <li>Visualize routes on an interactive map</li>
+                                    <li>Optimize routes based on bus capacity constraints</li>
+                                    <li>Generate detailed route reports</li>
+                                </ul>
+                                
+                                <h6>Optimization Methods:</h6>
+                                <ul>
+                                    <li><strong>Vogel's Approximation Method</strong>: Balances cost minimization with good initial solutions</li>
+                                    <li><strong>Least Cost Method</strong>: Prioritizes the lowest cost allocations first</li>
+                                    <li><strong>Modified Distribution (MODI)</strong>: Improves an initial solution through iterative optimization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Set default college location (can be customized)
+    document.getElementById('college_lat').value = '40.7128';
+    document.getElementById('college_lng').value = '-74.0060';
+</script>
+{% endblock %}

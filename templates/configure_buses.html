@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Configure Buses - Optimal College Bus Route Planner{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-bus"></i> Configure Buses</h4>
+            </div>
+            <div class="card-body">
+                <div class="step-container">
+                    <div class="step completed">
+                        <i class="fas fa-upload"></i>
+                        <h5>Step 1</h5>
+                        <p>Upload Student Data</p>
+                    </div>
+                    <div class="step active">
+                        <i class="fas fa-bus"></i>
+                        <h5>Step 2</h5>
+                        <p>Configure Buses</p>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-route"></i>
+                        <h5>Step 3</h5>
+                        <p>Optimize Routes</p>
+                    </div>
+                    <div class="step">
+                        <i class="fas fa-map"></i>
+                        <h5>Step 4</h5>
+                        <p>View Results</p>
+                    </div>
+                </div>
+
+                <form action="{{ url_for('optimize_routes') }}" method="post">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Bus Configuration</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> Total number of students: <strong>{{ student_count }}</strong>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="num_buses" class="form-label">Number of Buses</label>
+                                <input type="number" class="form-control" id="num_buses" name="num_buses" min="1" max="10" value="3" required>
+                                <div class="form-text">
+                                    Specify how many buses are available for transportation.
+                                </div>
+                            </div>
+                            
+                            <div id="bus-capacities">
+                                <!-- Bus capacity inputs will be added here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5>Optimization Method</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="method" id="method_vogels" value="vogels" checked>
+                                    <label class="form-check-label" for="method_vogels">
+                                        <strong>Vogel's Approximation Method</strong>
+                                        <p class="text-muted">A heuristic approach that balances cost minimization with good initial solutions.</p>
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="method" id="method_least_cost" value="least_cost">
+                                    <label class="form-check-label" for="method_least_cost">
+                                        <strong>Least Cost Method</strong>
+                                        <p class="text-muted">Prioritizes the lowest cost allocations first, good for minimizing total distance.</p>
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="method" id="method_modi" value="modi">
+                                    <label class="form-check-label" for="method_modi">
+                                        <strong>Modified Distribution (MODI) Method</strong>
+                                        <p class="text-muted">Improves an initial solution through iterative optimization, best results but more computation.</p>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-route"></i> Optimize Routes
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Upload
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Dynamically add bus capacity inputs based on the number of buses
+    const numBusesInput = document.getElementById('num_buses');
+    const busCapacitiesDiv = document.getElementById('bus-capacities');
+    
+    function updateBusCapacities() {
+        const numBuses = parseInt(numBusesInput.value);
+        busCapacitiesDiv.innerHTML = '';
+        
+        // Calculate suggested capacity based on student count
+        const studentCount = {{ student_count }};
+        const suggestedCapacity = Math.ceil(studentCount / numBuses);
+        
+        for (let i = 0; i < numBuses; i++) {
+            const busDiv = document.createElement('div');
+            busDiv.className = 'mb-3';
+            busDiv.innerHTML = `
+                <label for="bus_capacity_${i}" class="form-label">Bus ${i + 1} Capacity</label>
+                <input type="number" class="form-control" id="bus_capacity_${i}" name="bus_capacity_${i}" 
+                       min="1" value="${suggestedCapacity}" required>
+            `;
+            busCapacitiesDiv.appendChild(busDiv);
+        }
+    }
+    
+    // Update capacities when the number of buses changes
+    numBusesInput.addEventListener('change', updateBusCapacities);
+    
+    // Initialize with default value
+    updateBusCapacities();
+</script>
+{% endblock %}
